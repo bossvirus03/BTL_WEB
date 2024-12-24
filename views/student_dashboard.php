@@ -109,7 +109,7 @@ try {
 <body>
     <header>
         <h1>Bảng Điều Khiển Sinh Viên</h1>
-        <a href="../controllers/logout.php">Đăng Xuất</a>
+        <a href="./logout.php">Đăng Xuất</a>
     </header>
     <div class="container">
         <h1>Chào mừng, sinh viên!</h1>

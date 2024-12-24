@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Tạo tài khoản</button>
         </form>
-        <a href="../controllers/logout.php">Đăng xuất</a>
+        <a href="./logout.php">Đăng xuất</a>
     </div>
 </body>
 </html>

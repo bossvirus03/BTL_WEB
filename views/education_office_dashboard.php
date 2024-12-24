@@ -80,7 +80,7 @@ if ($_SESSION['role'] !== 'education_office') {
 </head>
 <body>
     <div class="container">
-        <h1>Chào mừng, <?= htmlspecialchars($_SESSION['user']) ?></h1>
+        <h1>Chào mừng, <?= htmlspecialchars($_SESSION['username']) ?></h1>
         <h2>Chức năng:</h2>
         <ul>
             <li><a href="admin_create_account.php">Tạo tài khoản sinh viên</a></li>
@@ -88,7 +88,7 @@ if ($_SESSION['role'] !== 'education_office') {
         </ul>
 
         <div class="logout">
-            <a href="../controllers/logout.php">Đăng xuất</a>
+            <a href="./logout.php">Đăng xuất</a>
         </div>
     </div>
 </body>

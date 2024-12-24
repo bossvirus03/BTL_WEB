@@ -1,3 +1,29 @@
+<?php
+// Include the Database class
+include_once '../configs/db.php';
+
+// Create an instance of the Database class
+$database = new Database();
+$db = $database->getConnection();
+
+// Fetch students from the user table
+$stmt = $db->prepare("SELECT id, username FROM users WHERE role = 'student'"); // Assuming students have the role 'student'
+$stmt->execute();
+$students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Handle form submission (if any)
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $student_id = $_POST['student_id'];
+    $subject = $_POST['subject'];
+    $grade = $_POST['grade'];
+    $semester = $_POST['semester'];
+
+    // Perform necessary logic to update the grade in the database, e.g., insert into grades table
+    // This is a placeholder messag
+    $message = "Điểm đã được cập nhật thành công!";
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
