@@ -18,9 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $subject = $_POST['subject'];
     $grade = $_POST['grade'];
     $semester = $_POST['semester'];
-
-    // Perform necessary logic to update the grade in the database, e.g., insert into grades table
-    // This is a placeholder messag
     $message = "Điểm đã được cập nhật thành công!";
 }
 ?>

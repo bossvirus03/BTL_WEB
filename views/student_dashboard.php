@@ -18,7 +18,7 @@ try {
     $pdo = new PDO("mysql:host=localhost;port=3307;dbname=btl_web", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = "SELECT id, subject FROM grades WHERE student_id = :user_id";
+    $sql = "SELECT id, subject, grade FROM grades WHERE student_id = :user_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -125,6 +125,7 @@ try {
                         <tr>
                             <th>ID</th>
                             <th>Môn học</th>
+                            <th>Điểm</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,6 +133,7 @@ try {
                             <tr>
                                 <td><?php echo htmlspecialchars($row['id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['subject']); ?></td>
+                                <td><?php echo htmlspecialchars($row['grade']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
