@@ -1,34 +1,67 @@
 <?php
-session_start(); // Bắt đầu phiên làm việc
+session_start();
 
-// Kiểm tra xem người dùng đã đăng nhập chưa
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
+// Include the Database class
+include_once '../configs/db.php';
+
+// Kiểm tra session
+if (!isset($_SESSION['id']) || !isset($_SESSION['role'])) {
+    header("Location: ./login.php");
+    exit;
 }
 
 // Lấy thông tin người dùng từ session
 $user_id = $_SESSION['id'];
 $user_role = $_SESSION['role'];
 
-// Kết nối đến cơ sở dữ liệu
-require_once '../configs/db.php';
+// Tạo kết nối database
+$database = new Database();
+$db = $database->getConnection();
 
+// Lấy danh sách điểm từ bảng 'grades' theo user_id
+$results = [];
 try {
-    $pdo = new PDO("mysql:host=localhost;port=3307;dbname=btl_web", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $sql = "SELECT id, subject, grade FROM grades WHERE student_id = :user_id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt = $db->prepare("SELECT id, subject, grade, semester FROM grades WHERE student_id = :student_id");
+    $stmt->bindParam(':student_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
-
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "Lỗi kết nối hoặc truy vấn: " . $e->getMessage();
-    $results = [];
+    echo "Lỗi khi lấy dữ liệu: " . $e->getMessage();
+    exit;
+}
+
+// Handle form submission
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $student_id = $_POST['student_id'];
+    $subject = $_POST['subject'];
+    $grade = $_POST['grade'];
+    $semester = $_POST['semester'];
+
+    // Kiểm tra dữ liệu đầu vào
+    if ($student_id && $subject && $grade && $semester) {
+        try {
+            $sql = "INSERT INTO grades (student_id, subject, grade, semester) 
+                    VALUES (:student_id, :subject, :grade, :semester)
+                    ON DUPLICATE KEY UPDATE grade = :grade";
+            
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':student_id', $student_id);
+            $stmt->bindParam(':subject', $subject);
+            $stmt->bindParam(':grade', $grade);
+            $stmt->bindParam(':semester', $semester);
+
+            $stmt->execute();
+            $message = "Điểm đã được cập nhật thành công!";
+        } catch (PDOException $e) {
+            $message = "Lỗi khi cập nhật điểm: " . $e->getMessage();
+        }
+    } else {
+        $message = "Vui lòng nhập đầy đủ thông tin.";
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -117,7 +150,7 @@ try {
         <p><strong>ID:</strong> <?php echo htmlspecialchars($user_id); ?></p>
         <p><strong>Vai trò:</strong> <?php echo htmlspecialchars($user_role); ?></p>
 
-        <h2>Danh sách môn học</h2>
+        <h2>Danh sách môn học và điểm</h2>
         <div>
             <?php if (!empty($results)): ?>
                 <table>
@@ -126,6 +159,7 @@ try {
                             <th>ID</th>
                             <th>Môn học</th>
                             <th>Điểm</th>
+                            <th>Kỳ học</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,12 +168,13 @@ try {
                                 <td><?php echo htmlspecialchars($row['id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['subject']); ?></td>
                                 <td><?php echo htmlspecialchars($row['grade']); ?></td>
+                                <td><?php echo htmlspecialchars($row['semester']); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             <?php else: ?>
-                <p>Không có dữ liệu cho người dùng này.</p>
+                <p>Không có dữ liệu điểm cho sinh viên này.</p>
             <?php endif; ?>
         </div>
     </div>

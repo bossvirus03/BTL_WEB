@@ -11,16 +11,40 @@ $stmt = $db->prepare("SELECT id, username FROM users WHERE role = 'student'"); /
 $stmt->execute();
 $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle form submission (if any)
+// Handle form submission
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Lấy dữ liệu từ form
     $student_id = $_POST['student_id'];
     $subject = $_POST['subject'];
     $grade = $_POST['grade'];
     $semester = $_POST['semester'];
-    $message = "Điểm đã được cập nhật thành công!";
+
+    // Kiểm tra dữ liệu đầu vào
+    if ($student_id && $subject && $grade && $semester) {
+        try {
+            // Thêm hoặc cập nhật điểm vào bảng 'grades'
+            $sql = "INSERT INTO grades (student_id, subject, grade, semester) 
+                    VALUES (:student_id, :subject, :grade, :semester)
+                    ON DUPLICATE KEY UPDATE grade = :grade";
+
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':student_id', $student_id);
+            $stmt->bindParam(':subject', $subject);
+            $stmt->bindParam(':grade', $grade);
+            $stmt->bindParam(':semester', $semester);
+
+            $stmt->execute();
+            $message = "Điểm đã được cập nhật thành công!";
+        } catch (PDOException $e) {
+            $message = "Lỗi khi cập nhật điểm: " . $e->getMessage();
+        }
+    } else {
+        $message = "Vui lòng điền đầy đủ thông tin.";
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
