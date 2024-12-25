@@ -1,5 +1,10 @@
 <?php
-// Include the Database class
+session_start();
+if ($_SESSION['role'] !== 'education_office') {
+    header("Location: ../views/login.php");
+    exit();
+}
+
 include_once '../configs/db.php';
 
 // Create an instance of the Database class

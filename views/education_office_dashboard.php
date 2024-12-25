@@ -85,6 +85,7 @@ if ($_SESSION['role'] !== 'education_office') {
         <ul>
             <li><a href="admin_create_account.php">Tạo tài khoản sinh viên</a></li>
             <li><a href="set_grades.php">Set điểm cho sinh viên</a></li>
+            <li><a href="student_list.php">Danh sách sinh viên</a></li>
         </ul>
 
         <div class="logout">
