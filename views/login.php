@@ -1,34 +1,32 @@
 <?php
-session_start(); // Bắt đầu phiên làm việc
-require_once '../configs/db.php'; // Kết nối với cơ sở dữ liệu
+session_start(); 
+require_once '../configs/db.php'; 
+$database = new Database();
+$db = $database->getConnection();
+
 
 try {
-    // Kết nối cơ sở dữ liệu
-    $pdo = new PDO("mysql:host=localhost;port=3307;dbname=btl_web", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        // Kiểm tra username có tồn tại không
-        $query = "SELECT * FROM users WHERE username = :username";
-        $stmt = $pdo->prepare($query);
+        
+        $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
 
-        // Lấy dữ liệu người dùng
+        
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Kiểm tra mật khẩu
             if (password_verify($password, $user['password'])) {
-                // Lưu thông tin người dùng vào session
+                
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
 
-                // Điều hướng theo vai trò
+                
                 if ($user['role'] === 'student') {
                     header("Location: ../views/student_dashboard.php");
                 } elseif ($user['role'] === 'education_office') {

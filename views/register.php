@@ -2,10 +2,9 @@
 session_start();
 require_once '../configs/db.php';
 
+$database = new Database();
+$db = $database->getConnection();
 try {
-    // Kết nối cơ sở dữ liệu
-    $pdo = new PDO("mysql:host=localhost;port=3307;dbname=btl_web", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
@@ -19,8 +18,7 @@ try {
             $error_message = "Mật khẩu không khớp.";
         } else {
             // Kiểm tra username đã tồn tại chưa
-            $checkQuery = "SELECT COUNT(*) FROM users WHERE username = :username";
-            $stmt = $pdo->prepare($checkQuery);
+            $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->execute();
             $usernameExists = $stmt->fetchColumn();
@@ -32,8 +30,7 @@ try {
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
                 // Thêm người dùng mới
-                $insertQuery = "INSERT INTO users (username, name, email, password, role) VALUES (:username, :name, :email, :password, 'student')";
-                $stmt = $pdo->prepare($insertQuery);
+                $stmt = $db->prepare("INSERT INTO users (username, name, email, password, role) VALUES (:username, :name, :email, :password, 'student')");
                 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);

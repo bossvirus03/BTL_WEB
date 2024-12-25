@@ -8,3 +8,10 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+CREATE TABLE `grades` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `subject` varchar(100) NOT NULL,
+  `grade` float NOT NULL,
+  `semester` varchar(50) NOT NULL
+);
