@@ -50,6 +50,7 @@ if ($_SESSION['role'] !== 'education_office') {
             margin: 10px 0;
         }
         ul li a {
+            width: 80%;
             font-size: 18px;
             color: #ffd700;
             text-decoration: none;
@@ -82,7 +83,7 @@ if ($_SESSION['role'] !== 'education_office') {
     <div class="container">
         <h1>Chào mừng, <?= htmlspecialchars($_SESSION['username']) ?></h1>
         <h2>Chức năng:</h2>
-        <ul>
+        <ul style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
             <li><a href="admin_create_account.php">Tạo tài khoản sinh viên, phòng đào tạo</a></li>
             <li><a href="set_grades.php">Set điểm cho sinh viên</a></li>
             <li><a href="search.php">Tìm sinh viên</a></li>
