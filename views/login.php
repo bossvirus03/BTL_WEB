@@ -25,7 +25,7 @@ try {
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
 
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);//fetch(PDO::FETCH_ASSOC) trả về một mảng kết hợp với tên cột là key
 
         if ($user) {
             if (password_verify($password, $user['password'])) {

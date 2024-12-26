@@ -30,11 +30,23 @@ try {
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
                 // Thêm người dùng mới
-                $stmt = $db->prepare("INSERT INTO users (username, name, email, password, role) VALUES (:username, :name, :email, :password, 'student')");
+                $stmt = $db->prepare("INSERT INTO users (username, name, email, password, role) VALUES (:username, :name, :email, :password, 'student')");//Chuẩn bị một câu lệnh SQL để thực thi.
                 $stmt->bindParam(':username', $username, PDO::PARAM_STR);
                 $stmt->bindParam(':name', $name, PDO::PARAM_STR);
                 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
                 $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+
+                /*
+                $stmt->bindParam(':placeholder', $variable, PDO::PARAM_TYPE)
+                Mục đích: Gán giá trị cho các placeholder trong câu lệnh SQL.
+                Chi tiết:
+                    :placeholder: Tên của placeholder được sử dụng trong câu lệnh SQL.
+                    $variable: Biến chứa giá trị thực tế để gán vào placeholder.
+                        PDO::PARAM_TYPE: Loại dữ liệu của giá trị, ví dụ:
+                        PDO::PARAM_STR: Chuỗi (string).
+                        PDO::PARAM_INT: Số nguyên (integer).
+                        PDO::PARAM_BOOL: Boolean.
+                */ 
 
                 if ($stmt->execute()) {
                     $success_message = "Đăng ký thành công!";
@@ -165,7 +177,6 @@ try {
 <body>
     <div class="container">
         <h1>Đăng Ký</h1>
-        <!-- Hiển thị thông báo -->
         <?php if (isset($error_message)): ?>
             <div class="message error"><?php echo htmlspecialchars($error_message); ?></div>
         <?php endif; ?>
