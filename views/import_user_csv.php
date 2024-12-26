@@ -24,26 +24,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Chuẩn bị truy vấn SQL để chèn dữ liệu
             $sql = "INSERT INTO users (name, username, email, password, role) 
-                    VALUES (:username, :email, :password, :role, :name)";
+                    VALUES (:name, :username, :email, :password, :role)";
             $stmt = $db->prepare($sql);
 
             // Duyệt qua từng dòng trong tệp CSV
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
-                $username = $data[0];
-                $email = $data[1];
-                $password = $data[2]; // Giả định mật khẩu trong CSV là plaintext
-                $role = $data[3];
-                $name = $data[4];
+                $name = $data[0];
+                $username = $data[1];
+                $email = $data[2];
+                $password = $data[3]; // Giả định mật khẩu trong CSV là plaintext
+                $role = $data[4];
 
-                // Hash mật khẩu nếu cần
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                // Hash mật khẩu
+                $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
                 // Gán dữ liệu cho câu lệnh chuẩn bị
+                $stmt->bindParam(':name', $name);
                 $stmt->bindParam(':username', $username);
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':password', $hashedPassword);
                 $stmt->bindParam(':role', $role);
-                $stmt->bindParam(':name', $username);
 
                 // Thực thi câu lệnh
                 try {

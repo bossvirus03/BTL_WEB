@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error_message = "Lỗi: Tên đăng nhập đã tồn tại.";
     } else {
         // Mã hóa mật khẩu
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
         // Thêm tài khoản mới vào cơ sở dữ liệu
         $query = "INSERT INTO users (username, name, email, password, role) VALUES (:username, :name, :email, :password, :role)";
