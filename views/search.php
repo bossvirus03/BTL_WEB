@@ -136,6 +136,25 @@ if (isset($_GET['search'])) {
             margin: 0 auto;
             padding: 20px;
         }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .actions a {
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .actions a.delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+        .actions a.edit {
+            background-color: #ffc107;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +176,7 @@ if (isset($_GET['search'])) {
                     <th>Tên sinh viên</th>
                     <th>Email</th>
                     <th>Ngày tạo</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -167,6 +187,12 @@ if (isset($_GET['search'])) {
                         <td><?= htmlspecialchars($student['name']) ?></td>
                         <td><?= htmlspecialchars($student['email']) ?></td>
                         <td><?= htmlspecialchars($student['created_at']) ?></td>
+                        <td>
+                        <div class="actions">
+                            <a href="edit_student.php?id=<?= htmlspecialchars($student['id']) ?>" class="edit">Sửa</a>
+                            <a href="student_list.php?delete_id=<?= htmlspecialchars($student['id']) ?>" class="delete" onclick="return confirm('Bạn có chắc chắn muốn xoá sinh viên này?');">Xóa</a>
+                        </div>
+                    </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
