@@ -1,6 +1,15 @@
 <?php
 session_start();
 require_once '../configs/db.php';
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'student') {
+        header("Location: ../views/student_dashboard.php");
+        exit();
+    } elseif ($_SESSION['role'] === 'education_office') {
+        header("Location: ../views/education_office_dashboard.php");
+        exit();
+    }
+}
 
 $database = new Database();
 $db = $database->getConnection();
