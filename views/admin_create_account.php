@@ -11,6 +11,8 @@ $conn = $db->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
     $role = $_POST['role'];
 
@@ -28,9 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Thêm tài khoản mới vào cơ sở dữ liệu
-        $query = "INSERT INTO users (username, password, role) VALUES (:username, :password, :role)";
+        $query = "INSERT INTO users (username, name, email, password, role) VALUES (:username, :name, :email, :password, :role)";
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':password', $hashedPassword);
         $stmt->bindParam(':role', $role);
 
@@ -117,6 +121,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="username">Tên đăng nhập:</label>
             <input type="text" name="username" required><br><br>
 
+            <label for="name">Họ và tên:</label>
+            <input type="text" name="name" required><br><br>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" required><br><br>
+
             <label for="password">Mật khẩu:</label>
             <input type="password" name="password" required><br><br>
 
@@ -128,6 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Tạo tài khoản</button>
         </form>
+        
+        <a href="education_office_dashboard.php">Quay lại dashboard</a>
         <a href="./logout.php">Đăng xuất</a>
     </div>
 </body>

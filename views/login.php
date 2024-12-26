@@ -1,32 +1,38 @@
 <?php
 session_start(); 
 require_once '../configs/db.php'; 
+
+// Redirect logged-in users
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'student') {
+        header("Location: ../views/student_dashboard.php");
+        exit();
+    } elseif ($_SESSION['role'] === 'education_office') {
+        header("Location: ../views/education_office_dashboard.php");
+        exit();
+    }
+}
+
 $database = new Database();
 $db = $database->getConnection();
 
-
 try {
-
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        
         $stmt = $db->prepare("SELECT * FROM users WHERE username = :username");
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
 
-        
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
             if (password_verify($password, $user['password'])) {
-                
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
 
-                
                 if ($user['role'] === 'student') {
                     header("Location: ../views/student_dashboard.php");
                 } elseif ($user['role'] === 'education_office') {
