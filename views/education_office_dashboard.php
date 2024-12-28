@@ -86,6 +86,10 @@ if ($_SESSION['role'] !== 'education_office') {
         <ul style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
             <!-- <li><a href="admin_create_account.php">Tạo tài khoản sinh viên, phòng đào tạo</a></li> -->
             <li><a href="create_subject.php">Tạo Môn học</a></li>
+            <li><a href="create_major.php">Tạo Ngành học</a></li>
+            <li><a href="list_majors.php">danh sách Ngành học</a></li>
+            <li><a href="create_faculty.php">Tạo Khoa</a></li>
+            <li><a href="list_faculties.php">danh sách Khoa</a></li>
             <li><a href="set_grades.php">Set điểm cho sinh viên</a></li>
             <li><a href="search.php">Tìm sinh viên</a></li>
             <li><a href="student_list.php">Danh sách sinh viên</a></li>

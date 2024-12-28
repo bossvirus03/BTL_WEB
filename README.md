@@ -44,6 +44,32 @@ CREATE TABLE subjects (
 );
 ```
 
+# khởi tạo bảng majors
+
+```sql
+CREATE TABLE majors (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, -- Major ID
+    name VARCHAR(255) NOT NULL UNIQUE, -- Major name
+    description TEXT, -- Description of the major
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Creation timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Update timestamp
+);
+
+```
+
+# khởi tạo bảng faculties
+
+```sql
+CREATE TABLE faculties (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, -- Faculty ID
+    name VARCHAR(255) NOT NULL UNIQUE, -- Faculty name
+    description TEXT, -- Description of the faculty
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Creation timestamp
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Update timestamp
+);
+
+```
+
 ## Tạo người dùng đầu tiền với quyền là phòng đào tạo
 
 ```sql
