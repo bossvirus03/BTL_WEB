@@ -84,7 +84,8 @@ if ($_SESSION['role'] !== 'education_office') {
         <h1>Chào mừng, <?= htmlspecialchars($_SESSION['username']) ?></h1>
         <h2>Chức năng:</h2>
         <ul style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-            <li><a href="admin_create_account.php">Tạo tài khoản sinh viên, phòng đào tạo</a></li>
+            <!-- <li><a href="admin_create_account.php">Tạo tài khoản sinh viên, phòng đào tạo</a></li> -->
+            <li><a href="create_subject.php">Tạo Môn học</a></li>
             <li><a href="set_grades.php">Set điểm cho sinh viên</a></li>
             <li><a href="search.php">Tìm sinh viên</a></li>
             <li><a href="student_list.php">Danh sách sinh viên</a></li>

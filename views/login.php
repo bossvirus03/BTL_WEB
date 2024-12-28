@@ -145,6 +145,10 @@ try {
         <?php if (isset($error_message)): ?>
             <div class="message error"><?php echo htmlspecialchars($error_message); ?></div>
         <?php endif; ?>
+        <div style="width: 100px; height: 100px;display: flex; justify-content: center; align-items: center; margin: 0 auto; margin-bottom: 20px">
+            <img style="width: 100%; height: 100%; border-radius: 999px" src="./../assets/imgs/800px-Logo_Truong_Dai_hoc_Mo_-_Dia_chat.jpg
+            " alt="">
+        </div>
         <form method="POST" action="">
             <label for="username">Tên đăng nhập:</label>
             <input type="text" id="username" name="username" required>

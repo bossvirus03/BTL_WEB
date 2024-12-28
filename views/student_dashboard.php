@@ -18,10 +18,21 @@ $user_role = $_SESSION['role'];
 $database = new Database();
 $db = $database->getConnection();
 
-// Lấy danh sách điểm từ bảng 'grades' theo user_id
+// Lấy danh sách điểm từ bảng 'grades' kết hợp với bảng 'subjects'
 $results = [];
 try {
-    $stmt = $db->prepare("SELECT id, subject, grade, semester FROM grades WHERE student_id = :student_id");
+    $stmt = $db->prepare("
+        SELECT 
+            grades.id AS grade_id, 
+            subjects.name AS subject_name,
+            grades.grade_a, 
+            grades.grade_b, 
+            grades.grade_c,
+            grades.semester 
+        FROM grades 
+        JOIN subjects ON grades.subject_id = subjects.id 
+        WHERE grades.student_id = :student_id
+    ");
     $stmt->bindParam(':student_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -34,21 +45,25 @@ try {
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $student_id = $_POST['student_id'];
-    $subject = $_POST['subject'];
-    $grade = $_POST['grade'];
+    $subject_id = $_POST['subject_id'];
+    $grade_a = $_POST['grade_a'];
+    $grade_b = $_POST['grade_b'];
+    $grade_c = $_POST['grade_c'];
     $semester = $_POST['semester'];
 
     // Kiểm tra dữ liệu đầu vào
-    if ($student_id && $subject && $grade && $semester) {
+    if ($student_id && $subject_id && $grade_a && $grade_b && $grade_c && $semester) {
         try {
-            $sql = "INSERT INTO grades (student_id, subject, grade, semester) 
-                    VALUES (:student_id, :subject, :grade, :semester)
-                    ON DUPLICATE KEY UPDATE grade = :grade";
+            $sql = "INSERT INTO grades (student_id, subject_id, grade_a, grade_b, grade_c, semester) 
+                    VALUES (:student_id, :subject_id, :grade_a, :grade_b, :grade_c, :semester)
+                    ON DUPLICATE KEY UPDATE grade_a = :grade_a, grade_b = :grade_b, grade_c = :grade_c";
             
             $stmt = $db->prepare($sql);
-            $stmt->bindParam(':student_id', $student_id);
-            $stmt->bindParam(':subject', $subject);
-            $stmt->bindParam(':grade', $grade);
+            $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
+            $stmt->bindParam(':subject_id', $subject_id, PDO::PARAM_INT);
+            $stmt->bindParam(':grade_a', $grade_a);
+            $stmt->bindParam(':grade_b', $grade_b);
+            $stmt->bindParam(':grade_c', $grade_c);
             $stmt->bindParam(':semester', $semester);
 
             $stmt->execute();
@@ -61,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -137,6 +151,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         p {
             font-size: 16px;
         }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid green;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -151,6 +173,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <p><strong>Vai trò:</strong> <?php echo htmlspecialchars($user_role); ?></p>
 
         <h2>Danh sách môn học và điểm</h2>
+        <?php if (!empty($message)): ?>
+            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+        <?php endif; ?>
         <div>
             <?php if (!empty($results)): ?>
                 <table>
@@ -158,16 +183,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <tr>
                             <th>ID</th>
                             <th>Môn học</th>
-                            <th>Điểm</th>
+                            <th>Điểm A</th>
+                            <th>Điểm B</th>
+                            <th>Điểm C</th>
                             <th>Kỳ học</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($results as $row): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($row['id']); ?></td>
-                                <td><?php echo htmlspecialchars($row['subject']); ?></td>
-                                <td><?php echo htmlspecialchars($row['grade']); ?></td>
+                                <td><?php echo htmlspecialchars($row['grade_id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['subject_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['grade_a']); ?></td>
+                                <td><?php echo htmlspecialchars($row['grade_b']); ?></td>
+                                <td><?php echo htmlspecialchars($row['grade_c']); ?></td>
                                 <td><?php echo htmlspecialchars($row['semester']); ?></td>
                             </tr>
                         <?php endforeach; ?>

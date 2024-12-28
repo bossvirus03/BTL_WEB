@@ -99,6 +99,8 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);//PDO::FETCH_ASSOC làm cho kết 
 </head>
 <body>
     <h1>Danh sách sinh viên</h1>
+    <div style="display: flex; justify-content: space-between; margin: 0 150px;"> <div></div><div style="width: 200px; height: 40px; background-color: pink; border-radius: 10px; padding: 8px 12px;"><a href="admin_create_account.php">Tạo tài khoản sinh viên, phòng đào tạo</a></div></div>
+
     <table>
         <thead>
             <tr>

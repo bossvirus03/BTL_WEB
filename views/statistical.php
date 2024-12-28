@@ -4,13 +4,13 @@ require_once '../configs/db.php';
 $db = new Database();
 $conn = $db->getConnection();
 
-// Thống kê xếp loại
+// Thống kê xếp loại với điểm mới (a * 0.6 + b * 0.3 + c * 0.1)
 $query = "
     SELECT
-        SUM(CASE WHEN grade >= 8 THEN 1 ELSE 0 END) AS gioi,
-        SUM(CASE WHEN grade >= 6.5 AND grade < 8 THEN 1 ELSE 0 END) AS kha,
-        SUM(CASE WHEN grade >= 5 AND grade < 6.5 THEN 1 ELSE 0 END) AS trung_binh,
-        SUM(CASE WHEN grade < 5 THEN 1 ELSE 0 END) AS yeu
+        SUM(CASE WHEN (grade_a * 0.6 + grade_b * 0.3 + grade_c * 0.1) >= 8 THEN 1 ELSE 0 END) AS gioi,
+        SUM(CASE WHEN (grade_a * 0.6 + grade_b * 0.3 + grade_c * 0.1) >= 6.5 AND (grade_a * 0.6 + grade_b * 0.3 + grade_c * 0.1) < 8 THEN 1 ELSE 0 END) AS kha,
+        SUM(CASE WHEN (grade_a * 0.6 + grade_b * 0.3 + grade_c * 0.1) >= 5 AND (grade_a * 0.6 + grade_b * 0.3 + grade_c * 0.1) < 6.5 THEN 1 ELSE 0 END) AS trung_binh,
+        SUM(CASE WHEN (grade_a * 0.6 + grade_b * 0.3 + grade_c * 0.1) < 5 THEN 1 ELSE 0 END) AS yeu
     FROM grades
 ";
 $stmt = $conn->prepare($query);
@@ -43,12 +43,12 @@ $values = [
     <title>Biểu đồ xếp loại sinh viên</title>
     <style>
         .container{
-            max-width: 400px
+            max-width: 400px;
         }
     </style>
 </head>
 <body>
-    <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+    <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
         <h1>Biểu đồ xếp loại sinh viên</h1>
     
         <div class="container"><canvas id="pieChart" width="400" height="400"></canvas></div>
